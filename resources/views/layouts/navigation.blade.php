@@ -104,6 +104,13 @@
                         <span class="ms-3">{{ __('Buat Pekerjaan') }}</span>
                     </x-nav-link>
                 </li>
+
+                <li>
+                    <x-nav-link :href="route('employeeProfile.create')" :active="request()->routeIs('employeeProfile.create')">
+                        <ion-icon name="Profile" class="w-5 h-5 text-gray-700"></ion-icon>
+                        <span class="ms-3">{{ __('Profile Employee') }}</span>
+                    </x-nav-link>
+                </li>
             @endif
 
             <li>
