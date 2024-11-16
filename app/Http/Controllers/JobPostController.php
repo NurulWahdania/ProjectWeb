@@ -6,8 +6,6 @@ use App\Models\jobPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
 class JobPostController extends Controller
 {
     /**
@@ -15,7 +13,7 @@ class JobPostController extends Controller
      */
     public function index()
     {
-        return view('employeeProfile.index');
+        return view('jobPost.index');
     }
 
     /**
@@ -31,7 +29,7 @@ class JobPostController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
+        // Validasi data input
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -43,12 +41,21 @@ class JobPostController extends Controller
             'status' => 'required|string',
         ]);
 
-        // Assuming the authenticated user is an employer and has an employer profile
-        $validatedData['employer_id'] = auth()->employerProfile->id;
+        // Dapatkan user yang sedang login
+        $user = Auth::user();
 
-        jobPost::create($validatedData);
+        // Cek apakah user memiliki employerProfile
+        if ($user && $user->employerProfile) {
+            $validatedData['employer_id'] = $user->employerProfile->id;
+        } else {
+            // Jika tidak ada employerProfile, redirect dengan error
+            return redirect()->back()->with('error', 'Employer profile is required.');
+        }
 
-        return redirect()->route('jobPost.index')->with('success', 'Job post created successfully.');
+        // Simpan job post
+        jobPost::create($request->all());
+
+        return redirect()->to('/jobPost')->with('success', 'Job post created successfully.');
     }
 
     /**
@@ -83,3 +90,4 @@ class JobPostController extends Controller
         //
     }
 }
+

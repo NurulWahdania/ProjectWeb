@@ -18,16 +18,13 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexSeeker()
+    public function index()
     {
-        $jobposts = jobPost::latest()->paginate(10);
-        return view('jobPost.index', compact('jobposts'));
-    }
-
-    public function 
-    public function seekerjob(){
-        $jobposts = jobPost::latest()->paginate(10);
-        return view('jobPost.index', compact('jobposts'));
+        if(Auth::check()) {
+            if(Auth::user()->role == 'admin') {
+                return view()
+            } 
+        }
     }
 
 

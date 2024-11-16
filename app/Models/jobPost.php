@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class jobPost extends Model
 {
     use HasFactory;
+
+    protected $table = "job_posts";
+
     protected $fillable = [
         'title', 
         'description', 
